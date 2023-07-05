@@ -1,0 +1,9 @@
+{
+	"name": "khtvbot",
+	"version": "0.0.1",
+	"type": "module",
+	"installConfig": {
+		"pnp": true
+	},
+	"packageManager": "yarn@3.5.0"
+}
