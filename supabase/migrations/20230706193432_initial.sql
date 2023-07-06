@@ -1,0 +1,3 @@
+CREATE TABLE groups (
+	id BIGINT PRIMARY KEY
+);

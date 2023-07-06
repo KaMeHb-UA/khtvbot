@@ -7,7 +7,7 @@ insert_final_newline = true
 [*.{js,json,yml}]
 charset = utf-8
 
-[*.{js,jsx,ts,tsx,json}]
+[*.{js,jsx,ts,tsx,json,sql}]
 indent_style = tab
 indent_size = 4
 

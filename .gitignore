@@ -31,6 +31,3 @@ dist-ssr
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-
-# ignore built identity
-/public/identity
