@@ -1,0 +1,7 @@
+CREATE TABLE updates (
+	update_id BIGINT PRIMARY KEY,
+	chat_id BIGINT NOT NULL,
+	type VARCHAR(255) NOT NULL,
+	data JSONB NOT NULL,
+	received_at TIMESTAMP DEFAULT NOW()
+);

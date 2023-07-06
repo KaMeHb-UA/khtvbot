@@ -1,13 +1,20 @@
 import init from './init';
-import DB from './db';
+import bot from './bot';
 
 export default {
-	async fetch(request: Request, env: Record<string, string>, ctx: any) {
+	async fetch(request: Request, env: Record<string, string>) {
 		init(env);
-		console.log('request:\n', request);
-		console.log('\nenv:\n', env);
-		console.log('\nctx:\n', ctx);
-		console.log('\nGroup list:\n', await DB.groupList());
-		return new Response('Hello World bundled!');
+		try {
+			await bot.processUpdate(
+				request.headers.get('X-Telegram-Bot-Api-Secret-Token'),
+				await request.json(),
+			);
+			return new Response('OK');
+		} catch(e) {
+			console.error(e);
+			return new Response((e as Error).message, {
+				status: 500,
+			});
+		}
 	},
 };
