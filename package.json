@@ -1,0 +1,16 @@
+{
+	"name": "khtvbot",
+	"version": "0.0.1",
+	"type": "module",
+	"dependencies": {
+		"@supabase/supabase-js": "^2.26.0"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20230628.0",
+		"typescript": "^5.1.6"
+	},
+	"installConfig": {
+		"pnp": true
+	},
+	"packageManager": "yarn@3.6.1"
+}
