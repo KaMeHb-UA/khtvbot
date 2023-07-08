@@ -22,7 +22,7 @@ export default new class DB {
 	}
 
 	async addUpdate(updateId: number, chatId: number, type: string, data: any) {
-		await this.client.from('updates').insert({ update_id: updateId, chat_id: chatId, type, data });
+		await this.client.from('updates').insert({ update_id: updateId, chat_id: chatId, type, data, uid: data?.from?.id });
 	}
 
 	async groupList() {
