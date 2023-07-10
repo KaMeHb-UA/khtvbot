@@ -6,7 +6,7 @@ on:
       - published
 
 jobs:
-  Deploy:
+  deploy:
     name: Deploy
     runs-on: ubuntu-latest
     if: ${{ !github.event.release.prerelease }}
