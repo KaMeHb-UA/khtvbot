@@ -90,7 +90,7 @@ export default new class TGBot {
 				groupRulesMessageId: groupRules[message.chat.id],
 			});
 			return {
-				waitUntil: sleep(30_000).then(() => this.deleteMessage(message.chat.id, messageId)),
+				waitUntil: sleep(3_600_000).then(() => this.deleteMessage(message.chat.id, messageId)),
 			};
 		}
 	}
