@@ -1,12 +1,13 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { Database } from './schema';
 
 export default new class DB {
-	private client = (null as unknown as SupabaseClient);
+	private client = (null as unknown as SupabaseClient<Database>);
 
 	private cache: Record<string, any> = Object.create(null);
 
 	init(url: string, key: string) {
-		this.client = createClient(url, key, { global: { fetch } });
+		this.client = createClient<Database>(url, key, { global: { fetch } });
 	}
 
 	private async getCached<T>(cacheFieldName: string, load: () => Promise<T>) {
