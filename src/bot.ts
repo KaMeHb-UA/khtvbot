@@ -89,13 +89,11 @@ export default new class TGBot {
 				groupName: message.chat.title,
 				groupRulesMessageId: groupRules[message.chat.id],
 			});
-			return {
-				waitUntil: sleep(1_800_000).then(() => this.deleteMessage(message.chat.id, messageId)),
-			};
+			await DB.saveGreeting(message.chat.id, messageId);
 		}
 	}
 
-	private async processMessageUpdate(message: any) {
+	private async processMessageUpdate(message: any): Promise<any> {
 		const newChatMembers: any[] = !message.new_chat_members?.length
 			? message.new_chat_member || message.new_chat_participant
 			? [message.new_chat_member || message.new_chat_participant]
