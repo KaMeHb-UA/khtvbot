@@ -110,6 +110,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/js-yaml@npm:^4.0.5":
+  version: 4.0.5
+  resolution: "@types/js-yaml@npm:4.0.5"
+  checksum: 7dcac8c50fec31643cc9d6444b5503239a861414cdfaa7ae9a38bc22597c4d850c4b8cec3d82d73b3fbca408348ce223b0408d598b32e094470dfffc6d486b4d
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 20.4.0
   resolution: "@types/node@npm:20.4.0"
@@ -214,6 +221,13 @@ __metadata:
     delegates: ^1.0.0
     readable-stream: ^3.6.0
   checksum: 52590c24860fa7173bedeb69a4c05fb573473e860197f618b9a28432ee4379049336727ae3a1f9c4cb083114601c1140cee578376164d0e651217a9843f9fe83
+  languageName: node
+  linkType: hard
+
+"argparse@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "argparse@npm:2.0.1"
+  checksum: 83644b56493e89a254bae05702abf3a1101b4fa4d0ca31df1c9985275a5a5bd47b3c27b7fa0b71098d41114d8ca000e6ed90cad764b306f8a503665e4d517ced
   languageName: node
   linkType: hard
 
@@ -702,12 +716,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-yaml@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "js-yaml@npm:4.1.0"
+  dependencies:
+    argparse: ^2.0.1
+  bin:
+    js-yaml: bin/js-yaml.js
+  checksum: c7830dfd456c3ef2c6e355cc5a92e6700ceafa1d14bba54497b34a99f0376cecbb3e9ac14d3e5849b426d5a5140709a66237a8c991c675431271c4ce5504151a
+  languageName: node
+  linkType: hard
+
 "khtvbot@workspace:.":
   version: 0.0.0-use.local
   resolution: "khtvbot@workspace:."
   dependencies:
     "@cloudflare/workers-types": ^4.20230628.0
     "@supabase/supabase-js": ^2.26.0
+    "@types/js-yaml": ^4.0.5
+    js-yaml: ^4.1.0
     typescript: ^5.1.6
   languageName: unknown
   linkType: soft
