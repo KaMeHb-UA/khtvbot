@@ -35,4 +35,17 @@ export default new class DB {
 			},
 		)
 	}
+
+	async saveGreeting(chatId: number, messageId: number) {
+		await this.client.from('greetings').insert({ chat_id: chatId, message_id: messageId });
+	}
+
+	async removeGreeting(chatId: number, messageId: number) {
+		await this.client.from('greetings').delete().eq('chat_id', chatId).eq('message_id', messageId);
+	}
+
+	async getGreetings(before: Date) {
+		const res = await this.client.from('greetings').select().lte('datetime', before);
+		return res.data || [];
+	}
 }
