@@ -4,3 +4,8 @@ compatibility_date = "2023-07-05"
 
 [triggers]
 crons = ["*/30 * * * *"]
+
+[[rules]]
+type = "Text"
+globs = [ "**/*.yml" ]
+fallthrough = true

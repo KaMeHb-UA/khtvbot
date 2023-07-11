@@ -1,7 +1,6 @@
 import DB from '../db';
-import * as l10n from '../l10n';
-
-type FunctionArgs<F> = F extends (...args: infer R) => any ? R : never;
+import { fixChatId, serializeForHTML } from '../helpers';
+import translate, { type Phrases } from '../l10n';
 
 function arrayIncludes<T extends any[]>(array: T, searchElements: T) {
 	for (const element of searchElements) {
@@ -57,11 +56,10 @@ export default new class TGBot {
 		}
 		for (const newMember of newChatMembers) {
 			const messageId = await this.sendMessage('welcome', message.chat.id, message.message_id, {
-				userId: newMember.id,
-				userName: newMember.first_name,
-				groupId: message.chat.id,
-				groupName: message.chat.title,
-				groupRulesMessageId: groupRules[message.chat.id],
+				userLink: `tg://user?id=${newMember.id}`,
+				userName: serializeForHTML(newMember.first_name),
+				groupRulesLink: `tg://privatepost?channel=${fixChatId(message.chat.id)}&post=${groupRules[message.chat.id]}`,
+				groupName: serializeForHTML(message.chat.title),
 			});
 			await DB.saveGreeting(message.chat.id, messageId);
 		}
@@ -108,11 +106,11 @@ export default new class TGBot {
 		});
 	}
 
-	async sendMessage<T extends keyof typeof l10n>(type: T, chatId: number, replyTo: number, args: FunctionArgs<typeof l10n[T]>[0]) {
+	async sendMessage<T extends keyof Phrases>(type: T, chatId: number, replyTo: number, args: Phrases[T]) {
 		const { message_id: id } = await this.call('sendMessage', {
 			chat_id: chatId,
 			parse_mode: 'HTML',
-			text: l10n[type](args),
+			text: translate('uk', type, args),
 			...(
 				replyTo ? {
 					reply_to_message_id: replyTo,
