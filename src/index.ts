@@ -1,8 +1,9 @@
+import type { Environment, Context } from './platform';
 import init from './init';
 import bot from './bot';
 
 export default {
-	async fetch(request: Request, env: Record<string, string>, context: any) {
+	async fetch(request: Request, env: Environment, context: Context) {
 		init(env);
 		try {
 			const { waitUntil } = await bot.processUpdate(
