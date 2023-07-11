@@ -31,6 +31,23 @@ export interface Database {
   }
   public: {
     Tables: {
+      greetings: {
+        Row: {
+          chat_id: number
+          datetime: string | null
+          message_id: number
+        }
+        Insert: {
+          chat_id: number
+          datetime?: string | null
+          message_id: number
+        }
+        Update: {
+          chat_id?: number
+          datetime?: string | null
+          message_id?: number
+        }
+      }
       groups: {
         Row: {
           id: number
