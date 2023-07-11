@@ -1,5 +1,5 @@
-import DB from './db';
-import * as l10n from './l10n';
+import DB from '../db';
+import * as l10n from '../l10n';
 
 type FunctionArgs<F> = F extends (...args: infer R) => any ? R : never;
 
@@ -48,28 +48,6 @@ export default new class TGBot {
         const { ok, description, result } = await res.json<any>();
 		if (!ok) throw new Error(description);
 		return result;
-	}
-
-	private async deleteMessage(chatId: number, messageId: number) {
-		await this.call('deleteMessage', {
-			chat_id: chatId,
-			message_id: messageId,
-		});
-	}
-
-	private async sendMessage<T extends keyof typeof l10n>(type: T, chatId: number, replyTo: number, args: FunctionArgs<typeof l10n[T]>[0]) {
-		const { message_id: id } = await this.call('sendMessage', {
-			chat_id: chatId,
-			parse_mode: 'HTML',
-			text: l10n[type](args),
-			...(
-				replyTo ? {
-					reply_to_message_id: replyTo,
-					allow_sending_without_reply: true,
-				} : {}
-			)
-		});
-		return id as number;
 	}
 
 	private async replyWithWelcomeMessages(message: any, newChatMembers: any[]) {
@@ -121,5 +99,27 @@ export default new class TGBot {
 		return {
 			waitUntil: res && 'waitUntil' in res ? res.waitUntil : Promise.resolve(),
 		};
+	}
+
+	async deleteMessage(chatId: number, messageId: number) {
+		await this.call('deleteMessage', {
+			chat_id: chatId,
+			message_id: messageId,
+		});
+	}
+
+	async sendMessage<T extends keyof typeof l10n>(type: T, chatId: number, replyTo: number, args: FunctionArgs<typeof l10n[T]>[0]) {
+		const { message_id: id } = await this.call('sendMessage', {
+			chat_id: chatId,
+			parse_mode: 'HTML',
+			text: l10n[type](args),
+			...(
+				replyTo ? {
+					reply_to_message_id: replyTo,
+					allow_sending_without_reply: true,
+				} : {}
+			)
+		});
+		return id as number;
 	}
 }

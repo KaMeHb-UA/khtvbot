@@ -1,8 +1,10 @@
+import * as removeOldGreetings from './bot/cron/remove-old-greetings';
 import type { Environment } from './platform';
 
 type ProcessResult = void | Promise<void | { waitUntil: Promise<void> }>;
 
 const cronTasks: [trigger: string, processor: (env: Environment) => ProcessResult][] = [
+	[removeOldGreetings.trigger, removeOldGreetings.processor],
 ];
 
 export default async (trigger: string, env: Environment) => {
