@@ -1,0 +1,26 @@
+name: Setup Supabase destroy after workflow run
+
+description: Prepare Supabase destroy
+
+inputs: {}
+
+outputs:
+  api-url:
+    description: API URL
+  db-url:
+    description: DB URL
+  studio-url:
+    description: Studio URL
+  inbucket-url:
+    description: Inbucket URL
+  jwt-secret:
+    description: JWT secret
+  anon-key:
+    description: anon key
+  service-role-key:
+    description: service_role key
+
+runs:
+  using: node16
+  main: main.js
+  post: post.js
