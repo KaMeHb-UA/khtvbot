@@ -45,7 +45,7 @@ export default new class DB {
 	}
 
 	async getGreetings(before: Date) {
-		const res = await this.client.from('greetings').select().lte('datetime', before);
+		const res = await this.client.from('greetings').select().lte('datetime', before.toISOString());
 		return res.data || [];
 	}
 }
