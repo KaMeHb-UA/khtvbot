@@ -10,10 +10,6 @@ function arrayIncludes<T extends any[]>(array: T, searchElements: T) {
 	return false;
 }
 
-function sleep(ms: number) {
-	return new Promise<void>((r) => setTimeout(r, ms));
-}
-
 export default new class TGBot {
 	private token = '';
 	private webhookSecret = '';
