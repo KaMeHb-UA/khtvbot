@@ -9,3 +9,9 @@ export type Environment = Record<Secrets, string> & Record<Variables, string> & 
 export type Context = {
 	waitUntil: (promise: Promise<void>) => void;
 }
+
+export type ScheduledEvent = {
+	cron: string;
+	type: 'scheduled';
+	scheduledTime: number;
+};

@@ -1,6 +1,7 @@
 import type { Environment, Context } from './platform';
 import init from './init';
 import bot from './bot';
+import cron from './cron';
 
 export default {
 	async fetch(request: Request, env: Environment, context: Context) {
@@ -18,5 +19,10 @@ export default {
 				status: 500,
 			});
 		}
+	},
+	async scheduled(event: ScheduledEvent, env: Environment, context: Context) {
+		init(env);
+		const { waitUntil } = await cron(event.cron, env);
+		context.waitUntil(waitUntil);
 	},
 };
