@@ -11,7 +11,12 @@ export type Phrases = {
 		userName: string;
 		groupName: string;
 		groupRulesLink: string;
-	},
+	};
+	welcome_admin: {
+		userName: string;
+		groupLink: string;
+		groupName: string;
+	};
 };
 
 export default function translate<L extends keyof typeof languages, P extends keyof Phrases>(language: L, phrase: P, variables: Phrases[P]) {
