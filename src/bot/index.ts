@@ -132,6 +132,13 @@ export default new class TGBot {
 					result: null,
 				};
 			},
+			[OPCODE.BAN_USER]: async (userId: number | bigint) => {
+				await this.banChatMember(groupId, Number(userId));
+				return {
+					returnImmidiately: false,
+					result: null,
+				};
+			},
 			...staticOpcodeRunners,
 		});
 	}
@@ -219,7 +226,7 @@ export default new class TGBot {
 	}
 
 	async editMessage<T extends keyof Phrases>(type: T, chatId: number, messageId: number, args: Phrases[T], buttons?: TGButton[][]) {
-		const res = await this.call('editMessageText', {
+		await this.call('editMessageText', {
 			chat_id: chatId,
 			message_id: messageId,
 			parse_mode: 'HTML',
@@ -227,6 +234,13 @@ export default new class TGBot {
 			reply_markup: {
 				inline_keyboard: buttons,
 			},
+		});
+	}
+
+	async banChatMember(groupId: number, userId: number) {
+		await this.call('banChatMember', {
+			chat_id: groupId,
+			user_id: userId,
 		});
 	}
 }
