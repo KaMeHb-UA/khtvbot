@@ -139,6 +139,13 @@ export default new class TGBot {
 					result: null,
 				};
 			},
+			[OPCODE.MUTE_USER]: async (userId: number | bigint) => {
+				await this.muteChatMember(groupId, Number(userId));
+				return {
+					returnImmidiately: false,
+					result: null,
+				};
+			},
 			...staticOpcodeRunners,
 		});
 	}
@@ -239,6 +246,13 @@ export default new class TGBot {
 
 	async banChatMember(groupId: number, userId: number) {
 		await this.call('banChatMember', {
+			chat_id: groupId,
+			user_id: userId,
+		});
+	}
+
+	async muteChatMember(groupId: number, userId: number) {
+		await this.call('restrictChatMember', {
 			chat_id: groupId,
 			user_id: userId,
 		});
