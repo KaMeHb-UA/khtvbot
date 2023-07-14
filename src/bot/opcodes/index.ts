@@ -10,19 +10,19 @@ export enum OPCODE {
 type MaybePromise<T> = T | PromiseLike<T>;
 
 type Runners = {
-	[x in OPCODE]: (previousResult: any, restSequence: string) => MaybePromise<{
+	[x in OPCODE]: (previousResult: any, restSequence: string, initialArgs: string[]) => MaybePromise<{
 		result: any;
 		returnImmidiately: boolean;
 	}>;
 };
 
 export async function runString(input: string, runners: Runners) {
-	const [ops, args] = input.split(':');
+	console.log(`RUNNING OPCODED STRING: ${input}`);
+	const [ops, args, ...initialArgs] = input.split(':');
 	let runResult = args;
 	for (let i = ops.length - 1; i >= 0; i--) {
-		const { result, returnImmidiately } = await runners[ops[i] as OPCODE](runResult, ops.slice(0, i));
+		const { result, returnImmidiately } = await runners[ops[i] as OPCODE](runResult, ops.slice(0, i), initialArgs);
 		if (returnImmidiately) return;
 		runResult = result;
 	}
 }
-
