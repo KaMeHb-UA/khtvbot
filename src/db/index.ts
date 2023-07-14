@@ -64,7 +64,10 @@ export default new class DB {
 	}
 
 	async getLastUserUpdates(chatId: number, limit: number) {
-		const res = await this.client.from('distinct_user_updates').select().eq('chat_id', chatId).order('received_at', { ascending: false }).limit(limit);
-		return res.data || [];
+		const res = await this.client.rpc('distinct_updates', {
+			group_id: chatId,
+			amount: limit,
+		});
+		return res.data as Database['public']['Tables']['updates']['Row'][] || [];
 	}
 }
