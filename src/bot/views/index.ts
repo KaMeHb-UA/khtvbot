@@ -15,7 +15,11 @@ type AdminPhrases<T extends string> = T extends `admin_${infer _}` ? T : never;
 export type View = {
 	text: AdminPhrases<keyof Phrases>;
 	buttons: TGButton[][];
-}
+};
+
+export type ViewArgs = {
+	groupId: number;
+};
 
 const views: {
 	[x in typeof viewList[number]['id']]: Extract<typeof viewList[number], { id: x }>['default'];
