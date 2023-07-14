@@ -1,6 +1,6 @@
 export enum OPCODE {
 	CHANGE_VIEW = '0',
-//	BAN_USER = '1',
+	BAN_USER = '1',
 //	MUTE_USER = '2',
 //	SEARCH_USER = '3',
 	INT_TO_B64 = '4',
