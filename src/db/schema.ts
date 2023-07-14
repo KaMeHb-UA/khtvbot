@@ -31,6 +31,20 @@ export interface Database {
   }
   public: {
     Tables: {
+      admin_start_messages: {
+        Row: {
+          message_id: number
+          uid: number
+        }
+        Insert: {
+          message_id: number
+          uid: number
+        }
+        Update: {
+          message_id?: number
+          uid?: number
+        }
+      }
       greetings: {
         Row: {
           chat_id: number

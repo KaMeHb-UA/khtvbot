@@ -48,4 +48,18 @@ export default new class DB {
 		const res = await this.client.from('greetings').select().lte('datetime', before.toISOString());
 		return res.data || [];
 	}
+
+	async saveAdminDashboardMessage(uid: number, messageId: number) {
+		await this.client.from('admin_start_messages').insert({ uid, message_id: messageId });
+	}
+
+	async getAdminDashboardMessage(uid: number) {
+		const res = await this.client.from('admin_start_messages').select('message_id').eq('uid', uid).single();
+		if (!res.data) throw new Error(`Can't find admin start message for uid ${uid}`);
+		return res.data.message_id;
+	}
+
+	async removeAdminDashboardMessage(uid: number) {
+		await this.client.from('admin_start_messages').delete().eq('uid', uid);
+	}
 }
