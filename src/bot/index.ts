@@ -116,10 +116,10 @@ export default new class TGBot {
 		if (!callbackQuery?.data) return;
 		const adminId = callbackQuery.message.chat.id;
 		const currentDashboardMessage = await DB.getAdminDashboardMessage(adminId);
-		const { title: groupName } = await this.getChat(groupId);
+		const { title: groupName, invite_link: groupLink } = await this.getChat(groupId);
 		const translationArgs: TranslationArgs = {
-			userName: callbackQuery.message.from.first_name,
-			groupLink: 'https://t.me/c/' + fixChatId(groupId),
+			userName: callbackQuery.from.first_name,
+			groupLink,
 			groupName,
 		};
 		await runString(callbackQuery.data, {
