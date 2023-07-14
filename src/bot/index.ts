@@ -4,7 +4,7 @@ import translate, { type Phrases } from '../l10n';
 import { OPCODE, runString } from './opcodes';
 import { type TGButton } from './markup';
 import views, { type View, type ViewArgs } from './views';
-import dashboardView from './views/dashboard';
+import dashboardView, { id as dashboardViewId } from './views/dashboard';
 
 type UnionToIntersection<U> =(U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
@@ -122,11 +122,14 @@ export default new class TGBot {
 			groupLink,
 			groupName,
 		};
+		const changeAdminView = async (viewId: number | bigint) => {
+			const view = (views as Record<number, (args: ViewArgs) => (View | Promise<View>)>)[Number(viewId)];
+			const { text, buttons } = await view({ groupId });
+			await this.editMessage(text, adminId, currentDashboardMessage, translationArgs, buttons);
+		};
 		await runString(callbackQuery.data, {
 			[OPCODE.CHANGE_VIEW]: async (viewId: number | bigint) => {
-				const view = (views as Record<number, (args: ViewArgs) => (View | Promise<View>)>)[Number(viewId)];
-				const { text, buttons } = await view({ groupId });
-				await this.editMessage(text, adminId, currentDashboardMessage, translationArgs, buttons);
+				await changeAdminView(viewId);
 				return {
 					returnImmidiately: false,
 					result: null,
@@ -134,6 +137,8 @@ export default new class TGBot {
 			},
 			[OPCODE.BAN_USER]: async (userId: number | bigint) => {
 				await this.banChatMember(groupId, Number(userId));
+				await changeAdminView(dashboardViewId);
+				await this.answerCallbackQuery(callbackQuery.id, 'admin_ban_success', {});
 				return {
 					returnImmidiately: false,
 					result: null,
@@ -141,6 +146,8 @@ export default new class TGBot {
 			},
 			[OPCODE.MUTE_USER]: async (userId: number | bigint) => {
 				await this.muteChatMember(groupId, Number(userId));
+				await changeAdminView(dashboardViewId);
+				await this.answerCallbackQuery(callbackQuery.id, 'admin_mute_success', {});
 				return {
 					returnImmidiately: false,
 					result: null,
@@ -255,6 +262,13 @@ export default new class TGBot {
 		await this.call('restrictChatMember', {
 			chat_id: groupId,
 			user_id: userId,
+		});
+	}
+
+	async answerCallbackQuery<T extends keyof Phrases>(queryId: string, type: T, translationArgs: Phrases[T]) {
+		await this.call('answerCallbackQuery', {
+			callback_query_id: queryId,
+			text: translate('uk', type, translationArgs),
 		});
 	}
 }
