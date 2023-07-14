@@ -62,4 +62,9 @@ export default new class DB {
 	async removeAdminDashboardMessage(uid: number) {
 		await this.client.from('admin_start_messages').delete().eq('uid', uid);
 	}
+
+	async getLastUserUpdates(chatId: number, limit: number) {
+		const res = await this.client.from('distinct_user_updates').select().eq('chat_id', chatId).order('received_at', { ascending: false }).limit(limit);
+		return res.data || [];
+	}
 }
