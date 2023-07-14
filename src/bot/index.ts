@@ -3,7 +3,7 @@ import { base64ToInt, fixChatId, intToBase64, serializeForHTML } from '../helper
 import translate, { type Phrases } from '../l10n';
 import { OPCODE, runString } from './opcodes';
 import { type TGButton } from './markup';
-import views, { View } from './views';
+import views, { type View, type ViewArgs } from './views';
 import dashboardView from './views/dashboard';
 
 type UnionToIntersection<U> =(U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
@@ -124,8 +124,8 @@ export default new class TGBot {
 		};
 		await runString(callbackQuery.data, {
 			[OPCODE.CHANGE_VIEW]: async (viewId: number | bigint) => {
-				const view = (views as Record<number, () => View>)[Number(viewId)];
-				const { text, buttons } = view();
+				const view = (views as Record<number, (args: ViewArgs) => (View | Promise<View>)>)[Number(viewId)];
+				const { text, buttons } = await view({ groupId });
 				await this.editMessage(text, adminId, currentDashboardMessage, translationArgs, buttons);
 				return {
 					returnImmidiately: false,
