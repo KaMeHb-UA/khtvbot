@@ -104,7 +104,16 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      distinct_user_updates: {
+        Row: {
+          chat_id: number | null
+          data: Json | null
+          received_at: string | null
+          type: string | null
+          uid: number | null
+          update_id: number | null
+        }
+      }
     }
     Functions: {
       [_ in never]: never
