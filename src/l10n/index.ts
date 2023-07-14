@@ -22,6 +22,8 @@ export type Phrases = {
 	admin_back_cmd: Record<string, never>;
 	admin_ban_view: Record<string, never>;
 	admin_mute_view: Record<string, never>;
+	admin_ban_success: Record<string, never>;
+	admin_mute_success: Record<string, never>;
 };
 
 export default function translate<L extends keyof typeof languages, P extends keyof Phrases>(language: L, phrase: P, variables: Phrases[P]) {
