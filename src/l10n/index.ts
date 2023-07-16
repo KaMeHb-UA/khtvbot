@@ -24,6 +24,14 @@ export type Phrases = {
 	admin_mute_view: Record<string, never>;
 	admin_ban_success: Record<string, never>;
 	admin_mute_success: Record<string, never>;
+	user_ban_message: {
+		userLink: string;
+		userFullNameWithNick: string;
+	};
+	user_mute_message: {
+		userLink: string;
+		userName: string;
+	};
 };
 
 export default function translate<L extends keyof typeof languages, P extends keyof Phrases>(language: L, phrase: P, variables: Phrases[P]) {

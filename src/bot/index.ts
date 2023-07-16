@@ -257,6 +257,11 @@ export default new class TGBot {
 			chat_id: groupId,
 			user_id: userId,
 		});
+		const { user } = await this.getChatMember(groupId, userId);
+		await this.sendMessage('user_ban_message', groupId, 0, {
+			userLink: `tg://user?id=${user.id}`,
+			userFullNameWithNick: `${user.first_name}${user.last_name ? ' ' + user.last_name : ''}${user.username ? ` (@${user.username})` : ''}`,
+		});
 	}
 
 	async muteChatMember(groupId: number, userId: number) {
@@ -264,12 +269,24 @@ export default new class TGBot {
 			chat_id: groupId,
 			user_id: userId,
 		});
+		const { user } = await this.getChatMember(groupId, userId);
+		await this.sendMessage('user_mute_message', groupId, 0, {
+			userLink: `tg://user?id=${user.id}`,
+			userName: user.first_name,
+		});
 	}
 
 	async answerCallbackQuery<T extends keyof Phrases>(queryId: string, type: T, translationArgs: Phrases[T]) {
 		await this.call('answerCallbackQuery', {
 			callback_query_id: queryId,
 			text: translate('uk', type, translationArgs),
+		});
+	}
+
+	async getChatMember(chatId: number, memberId: number) {
+		return await this.call('getChatMember', {
+			chat_id: chatId,
+			user_id: memberId,
 		});
 	}
 }
