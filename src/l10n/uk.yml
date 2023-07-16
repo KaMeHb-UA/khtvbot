@@ -26,3 +26,9 @@ admin_ban_success: |
 
 admin_mute_success: |
   Користувачу заборонено надсилати повідомлення
+
+user_ban_message: |
+  Користувача <a href="${userLink}">${userFullNameWithNick}</a> було заблоковано рішенням адміністрації чату
+
+user_mute_message: |
+  <a href="${userLink}">${userName}</a>, рішенням адміністрації чату вам заборонено надсилати повідомлення. Срок дії обмежень: назавжди
