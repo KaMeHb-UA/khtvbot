@@ -96,11 +96,11 @@ export default new class TGBot {
 	}
 
 	private async sendAdminStartMessage(adminId: number, adminName: string, groupId: number) {
-		const { title: groupName } = await this.getChat(groupId);
+		const { title: groupName, invite_link: groupLink } = await this.getChat(groupId);
 		const view = dashboardView();
 		const messageId = await this.sendMessage(view.text, adminId, 0, {
 			userName: adminName,
-			groupLink: 'https://t.me/c/' + fixChatId(groupId),
+			groupLink,
 			groupName,
 		}, view.buttons);
 		await DB.removeAdminDashboardMessage(adminId);
