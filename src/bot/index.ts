@@ -208,6 +208,7 @@ export default new class TGBot {
 		const { message_id: id } = await this.call('sendMessage', {
 			chat_id: chatId,
 			parse_mode: 'HTML',
+			disable_web_page_preview: true,
 			text: translate('uk', type, args),
 			...(
 				replyTo ? {
