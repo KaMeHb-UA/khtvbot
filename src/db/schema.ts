@@ -31,6 +31,20 @@ export interface Database {
   }
   public: {
     Tables: {
+      admin_dynamic_inputs: {
+        Row: {
+          script: string
+          uid: number
+        }
+        Insert: {
+          script: string
+          uid: number
+        }
+        Update: {
+          script?: string
+          uid?: number
+        }
+      }
       admin_start_messages: {
         Row: {
           message_id: number
