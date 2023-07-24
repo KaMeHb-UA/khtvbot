@@ -32,6 +32,10 @@ export type Phrases = {
 		userLink: string;
 		userName: string;
 	};
+	admin_user_search_message: Record<string, never>;
+	admin_data_processing_message: Record<string, never>;
+	admin_user_list: Record<string, never>;
+	admin_search_cmd: Record<string, never>;
 };
 
 export default function translate<L extends keyof typeof languages, P extends keyof Phrases>(language: L, phrase: P, variables: Phrases[P]) {
