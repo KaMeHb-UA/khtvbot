@@ -27,6 +27,9 @@ export default async ({ groupId }: ViewArgs): Promise<View> => {
 		buttons: [
 			...dynamicRows,
 			[
+				new TGInlineButton('admin_search_cmd', `${OPCODE.BAN_USER}${OPCODE.SEARCH_USER}`),
+			],
+			[
 				new TGInlineButton('admin_back_cmd', `${OPCODE.CHANGE_VIEW}${OPCODE.B64_TO_INT}:${intToBase64(dashboardId)}`),
 			],
 		],

@@ -5,6 +5,9 @@ import { OPCODE, runString } from './opcodes';
 import { type TGButton } from './markup';
 import views, { type View, type ViewArgs } from './views';
 import dashboardView, { id as dashboardViewId } from './views/dashboard';
+import { id as dataProcessingViewId } from './views/data-processing';
+import { id as searchPromptViewId } from './views/search-prompt';
+import { id as searchViewId } from './views/search';
 
 type UnionToIntersection<U> =(U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
 
@@ -113,6 +116,18 @@ export default new class TGBot {
 			await this.deleteMessage(message.chat.id, message.message_id);
 			return;
 		}
+		let setProcessingView = false;
+		if (message?.text) {
+			const scriptToRun = await DB.getAdminDynamicInputScript(message.chat.id);
+			if (scriptToRun) {
+				callbackQuery = {
+					data: scriptToRun.replace('::', `${OPCODE.CHANGE_VIEW}${OPCODE.B64_TO_INT}:${intToBase64(searchViewId)}:`),
+					message,
+					from: message.from,
+				};
+				setProcessingView = true;
+			}
+		}
 		if (!callbackQuery?.data) return;
 		const adminId = callbackQuery.message.chat.id;
 		const currentDashboardMessage = await DB.getAdminDashboardMessage(adminId);
@@ -122,14 +137,23 @@ export default new class TGBot {
 			groupLink,
 			groupName,
 		};
-		const changeAdminView = async (viewId: number | bigint) => {
+		const changeAdminView = async (viewId: number | bigint, restSequence?: string, initialArgs?: string[]) => {
 			const view = (views as Record<number, (args: ViewArgs) => (View | Promise<View>)>)[Number(viewId)];
-			const { text, buttons } = await view({ groupId });
+			const { text, buttons } = await view({
+				groupId,
+				searchText: message?.text,
+				opcodeSequence: restSequence,
+				initialArgs,
+			});
 			await this.editMessage(text, adminId, currentDashboardMessage, translationArgs, buttons);
 		};
+		if (setProcessingView) {
+			await this.deleteMessage(message.chat.id, message.message_id);
+			await changeAdminView(dataProcessingViewId);
+		}
 		await runString(callbackQuery.data, {
-			[OPCODE.CHANGE_VIEW]: async (viewId: number | bigint) => {
-				await changeAdminView(viewId);
+			[OPCODE.CHANGE_VIEW]: async (viewId: number | bigint, restSequence: string, initialArgs: string[]) => {
+				await changeAdminView(viewId, restSequence, initialArgs);
 				return {
 					returnImmidiately: false,
 					result: null,
@@ -150,6 +174,14 @@ export default new class TGBot {
 				await this.answerCallbackQuery(callbackQuery.id, 'admin_mute_success', {});
 				return {
 					returnImmidiately: false,
+					result: null,
+				};
+			},
+			[OPCODE.SEARCH_USER]: async (_previousResult: unknown, restSequence: string, initialArgs: string[]) => {
+				await DB.setAdminDynamicInputScript(adminId, `${restSequence}::${initialArgs.join(':')}`);
+				await changeAdminView(searchPromptViewId);
+				return {
+					returnImmidiately: true,
 					result: null,
 				};
 			},
