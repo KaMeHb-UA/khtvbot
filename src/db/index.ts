@@ -70,4 +70,17 @@ export default new class DB {
 		});
 		return res.data as Database['public']['Tables']['updates']['Row'][] || [];
 	}
+
+	async getAdminDynamicInputScript(adminId: number) {
+		const res = await this.client.from('admin_dynamic_inputs').select('script').eq('uid', adminId);
+		const script = res.data?.[0]?.script;
+		if (script) {
+			await this.client.from('admin_dynamic_inputs').delete().eq('uid', adminId);
+		}
+		return script;
+	}
+
+	async setAdminDynamicInputScript(adminId: number, scriptToRun: string) {
+		await this.client.from('admin_dynamic_inputs').insert({ uid: adminId, script: scriptToRun });
+	}
 }
