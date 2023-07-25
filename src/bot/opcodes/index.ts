@@ -19,7 +19,6 @@ type Runners = {
 };
 
 export async function runString(input: string, runners: Runners) {
-	console.log(`RUNNING OPCODED STRING: ${input}`);
 	const [ops, args, ...initialArgs] = input.split(':');
 	let runResult = args;
 	for (let i = ops.length - 1; i >= 0; i--) {
