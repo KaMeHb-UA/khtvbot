@@ -8,6 +8,8 @@ import dashboardView, { id as dashboardViewId } from './views/dashboard';
 import { id as dataProcessingViewId } from './views/data-processing';
 import { id as searchPromptViewId } from './views/search-prompt';
 import { id as searchViewId } from './views/search';
+import { id as banConfirmationViewId } from './views/ban-confirmation';
+import { id as muteConfirmationViewId } from './views/mute-confirmation';
 
 function arrayIncludes<T extends any[]>(array: T, searchElements: T) {
 	for (const element of searchElements) {
@@ -178,6 +180,22 @@ export default new class TGBot {
 				await changeAdminView(searchPromptViewId);
 				return {
 					returnImmidiately: true,
+					result: null,
+				};
+			},
+			[OPCODE.BAN_CONFIRM]: async (userId: number | bigint) => {
+				const { user } = await this.getChatMember(groupId, Number(userId));
+				await changeAdminView(banConfirmationViewId, undefined, [userId.toString(), user.first_name, user.last_name, user.username]);
+				return {
+					returnImmidiately: false,
+					result: null,
+				};
+			},
+			[OPCODE.MUTE_CONFIRM]: async (userId: number | bigint) => {
+				const { user } = await this.getChatMember(groupId, Number(userId));
+				await changeAdminView(muteConfirmationViewId, undefined, [userId.toString(), user.first_name, user.last_name, user.username]);
+				return {
+					returnImmidiately: false,
 					result: null,
 				};
 			},

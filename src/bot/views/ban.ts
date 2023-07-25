@@ -20,14 +20,14 @@ export default async ({ groupId }: ViewArgs): Promise<View> => {
 		const lastRow = dynamicRows[dynamicRows.length - 1];
 		const updateFrom = (update.data as any).from;
 		const btnText = `👤 ${updateFrom.first_name}${updateFrom.last_name ? ' ' + updateFrom.last_name : ''}${updateFrom.username ? ` (@${updateFrom.username})` : ''}`;
-		lastRow.push(new TGInlineButton(btnText, `${OPCODE.BAN_USER}${OPCODE.B64_TO_INT}:${intToBase64(updateFrom.id)}`, false));
+		lastRow.push(new TGInlineButton(btnText, `${OPCODE.BAN_CONFIRM}${OPCODE.B64_TO_INT}:${intToBase64(updateFrom.id)}`, false));
 	});
 	return {
 		text: 'admin_ban_view',
 		buttons: [
 			...dynamicRows,
 			[
-				new TGInlineButton('admin_search_cmd', `${OPCODE.BAN_USER}${OPCODE.SEARCH_USER}`),
+				new TGInlineButton('admin_search_cmd', `${OPCODE.BAN_CONFIRM}${OPCODE.SEARCH_USER}`),
 			],
 			[
 				new TGInlineButton('admin_back_cmd', `${OPCODE.CHANGE_VIEW}${OPCODE.B64_TO_INT}:${intToBase64(dashboardId)}`),
