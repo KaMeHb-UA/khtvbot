@@ -1,11 +1,13 @@
-import type { Phrases } from '../../l10n';
+import type { DynamicTranslationArgs, Phrases } from '../../l10n';
 import type { TGButton } from '../markup';
 import * as dashboard from './dashboard';
 import * as ban from './ban';
 import * as mute from './mute';
 import * as search from './search';
-import * as  searchPrompt from './search-prompt';
-import * as  dataProcessing from './data-processing';
+import * as searchPrompt from './search-prompt';
+import * as dataProcessing from './data-processing';
+import * as banConfirmation from './ban-confirmation';
+import * as muteConfirmation from './mute-confirmation';
 
 const viewList = [
 	dashboard,
@@ -14,12 +16,15 @@ const viewList = [
 	search,
 	searchPrompt,
 	dataProcessing,
+	banConfirmation,
+	muteConfirmation,
 ];
 
 type AdminPhrases<T extends string> = T extends `admin_${infer _}` ? T : never;
 
 export type View = {
 	text: AdminPhrases<keyof Phrases>;
+	textTranslationArgs?: DynamicTranslationArgs;
 	buttons: TGButton[][];
 };
 
