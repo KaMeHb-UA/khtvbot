@@ -46,3 +46,15 @@ admin_user_list: |
 
 admin_search_cmd: |
   🔍 Пошук користувача
+
+admin_user_ban_confirmation: |
+  Ви впевнені, що хочете забанити користувача <a href="${targetUserLink}">${targetUserName}</a>?
+
+admin_user_mute_confirmation: |
+  Ви впевнені, що хочете заборонити надсилання повідомлень користувачу <a href="${targetUserLink}">${targetUserName}</a>?
+
+admin_confirmation_yes_cmd: |
+  ✅ Підтвердити
+
+admin_confirmation_no_cmd: |
+  🚫 Скасувати

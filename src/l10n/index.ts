@@ -37,6 +37,16 @@ export type Phrases = {
 	admin_data_processing_message: Record<string, never>;
 	admin_user_list: Record<string, never>;
 	admin_search_cmd: Record<string, never>;
+	admin_user_ban_confirmation: {
+		targetUserName: string;
+		targetUserLink: string;
+	};
+	admin_user_mute_confirmation: {
+		targetUserName: string;
+		targetUserLink: string;
+	};
+	admin_confirmation_yes_cmd: Record<string, never>;
+	admin_confirmation_no_cmd: Record<string, never>;
 };
 
 type UnionToIntersection<U> =(U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
