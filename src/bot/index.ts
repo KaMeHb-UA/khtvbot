@@ -135,13 +135,13 @@ export default new class TGBot {
 		};
 		const changeAdminView = async (viewId: number | bigint, restSequence?: string, initialArgs?: string[]) => {
 			const view = (views as Record<number, (args: ViewArgs) => (View | Promise<View>)>)[Number(viewId)];
-			const { text, buttons } = await view({
+			const { text, textTranslationArgs, buttons } = await view({
 				groupId,
 				searchText: message?.text,
 				opcodeSequence: restSequence,
 				initialArgs,
 			});
-			await this.editMessage(text, adminId, currentDashboardMessage, translationArgs, buttons);
+			await this.editMessage(text, adminId, currentDashboardMessage, { ...translationArgs, ...textTranslationArgs }, buttons);
 		};
 		if (setProcessingView) {
 			await this.deleteMessage(message.chat.id, message.message_id);

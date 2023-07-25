@@ -1,4 +1,4 @@
-import type { Phrases } from '../../l10n';
+import type { DynamicTranslationArgs, Phrases } from '../../l10n';
 import type { TGButton } from '../markup';
 import * as dashboard from './dashboard';
 import * as ban from './ban';
@@ -20,6 +20,7 @@ type AdminPhrases<T extends string> = T extends `admin_${infer _}` ? T : never;
 
 export type View = {
 	text: AdminPhrases<keyof Phrases>;
+	textTranslationArgs?: DynamicTranslationArgs;
 	buttons: TGButton[][];
 };
 
