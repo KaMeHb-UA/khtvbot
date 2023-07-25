@@ -1,6 +1,6 @@
 import DB from '../db';
 import { base64ToInt, fixChatId, intToBase64, serializeForHTML } from '../helpers';
-import translate, { type Phrases } from '../l10n';
+import translate, { type StaticTranslationArgs, type Phrases } from '../l10n';
 import { OPCODE, runString } from './opcodes';
 import { type TGButton } from './markup';
 import views, { type View, type ViewArgs } from './views';
@@ -8,10 +8,6 @@ import dashboardView, { id as dashboardViewId } from './views/dashboard';
 import { id as dataProcessingViewId } from './views/data-processing';
 import { id as searchPromptViewId } from './views/search-prompt';
 import { id as searchViewId } from './views/search';
-
-type UnionToIntersection<U> =(U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
-
-type TranslationArgs = UnionToIntersection<Exclude<{ [x in View['text']]: Phrases[x] }[View['text']], Record<string, never>>>;
 
 function arrayIncludes<T extends any[]>(array: T, searchElements: T) {
 	for (const element of searchElements) {
@@ -132,7 +128,7 @@ export default new class TGBot {
 		const adminId = callbackQuery.message.chat.id;
 		const currentDashboardMessage = await DB.getAdminDashboardMessage(adminId);
 		const { title: groupName, invite_link: groupLink } = await this.getChat(groupId);
-		const translationArgs: TranslationArgs = {
+		const translationArgs: StaticTranslationArgs = {
 			userName: callbackQuery.from.first_name,
 			groupLink,
 			groupName,
