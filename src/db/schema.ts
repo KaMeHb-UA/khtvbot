@@ -116,6 +116,23 @@ export interface Database {
           update_id?: number
         }
       }
+      warnings: {
+        Row: {
+          chat_id: number
+          datetime: string | null
+          uid: number
+        }
+        Insert: {
+          chat_id: number
+          datetime?: string | null
+          uid: number
+        }
+        Update: {
+          chat_id?: number
+          datetime?: string | null
+          uid?: number
+        }
+      }
     }
     Views: {
       [_ in never]: never
