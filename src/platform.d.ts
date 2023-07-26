@@ -1,4 +1,4 @@
-type Secrets = 'BOT_TOKEN' | 'BOT_WEBHOOK_SECRET' | 'SUPABASE_URL' | 'SUPABASE_KEY';
+type Secrets = 'BOT_TOKEN' | 'BOT_WEBHOOK_SECRET' | 'SUPABASE_URL' | 'SUPABASE_KEY' | 'NTFY_TOPIC';
 
 type Variables = never;
 
