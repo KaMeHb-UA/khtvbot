@@ -116,6 +116,23 @@ export interface Database {
           update_id?: number
         }
       }
+      warning_locks: {
+        Row: {
+          chat_id: number
+          session: string
+          uid: number
+        }
+        Insert: {
+          chat_id: number
+          session: string
+          uid: number
+        }
+        Update: {
+          chat_id?: number
+          session?: string
+          uid?: number
+        }
+      }
       warnings: {
         Row: {
           chat_id: number
@@ -138,6 +155,10 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      acquire_warn_session: {
+        Args: { group_id: number; user_id: number }
+        Returns: string
+      }
       distinct_updates: {
         Args: { group_id: number; amount: number }
         Returns: unknown
