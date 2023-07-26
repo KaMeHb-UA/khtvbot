@@ -34,11 +34,13 @@ jobs:
             BOT_WEBHOOK_SECRET
             SUPABASE_URL
             SUPABASE_KEY
+            NTFY_TOPIC
         env:
           BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
           BOT_WEBHOOK_SECRET: ${{ secrets.BOT_WEBHOOK_SECRET }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
 
       - name: Run DB migrations
         run: |
