@@ -109,4 +109,13 @@ export default new class DB {
 	async addUserWarning(chatId: number, userId: number) {
 		await this.client.from('warnings').insert({ chat_id: chatId, uid: userId });
 	}
+
+	async getABFlags() {
+		const flags: Record<string, number[]> = {};
+		const res = await this.client.from('ab').select();
+		for (const { flag, user_ids: uids } of res.data || []) {
+			flags[flag] = uids as number[];
+		}
+		return flags;
+	}
 }
