@@ -31,6 +31,20 @@ export interface Database {
   }
   public: {
     Tables: {
+      ab: {
+        Row: {
+          flag: string
+          user_ids: Json
+        }
+        Insert: {
+          flag: string
+          user_ids: Json
+        }
+        Update: {
+          flag?: string
+          user_ids?: Json
+        }
+      }
       admin_dynamic_inputs: {
         Row: {
           script: string

@@ -106,7 +106,7 @@ export default new class TGBot {
 
 	private async sendAdminStartMessage(adminId: number, adminName: string, groupId: number) {
 		const { title: groupName, invite_link: groupLink } = await this.getChat(groupId);
-		const view = dashboardView();
+		const view = await dashboardView({ adminId });
 		const messageId = await this.sendMessage(view.text, adminId, 0, {
 			userName: adminName,
 			groupLink,
@@ -146,6 +146,7 @@ export default new class TGBot {
 		const changeAdminView = async (viewId: number | bigint, restSequence?: string, initialArgs?: string[]) => {
 			const view = (views as Record<number, (args: ViewArgs) => (View | Promise<View>)>)[Number(viewId)];
 			const { text, textTranslationArgs, buttons } = await view({
+				adminId: callbackQuery.from.id,
 				groupId,
 				searchText: message?.text,
 				opcodeSequence: restSequence,

@@ -39,6 +39,7 @@ export type View = {
 };
 
 export type ViewArgs = {
+	adminId: number;
 	groupId: number;
 	searchText?: string;
 	opcodeSequence?: string;
