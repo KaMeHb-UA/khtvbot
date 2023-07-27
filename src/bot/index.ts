@@ -10,6 +10,10 @@ import { id as searchPromptViewId } from './views/search-prompt';
 import { id as searchViewId } from './views/search';
 import { id as banConfirmationViewId } from './views/ban-confirmation';
 import { id as muteConfirmationViewId } from './views/mute-confirmation';
+import { id as warnConfirmationViewId } from './views/warn-confirmation';
+import { id as warnAlreadyProcessingViewId } from './views/warn-already-processing';
+import { id as warnCountExceededViewId } from './views/warn-count-exceeded';
+import { id as warnRecentViewId } from './views/warn-recent';
 
 function arrayIncludes<T extends any[]>(array: T, searchElements: T) {
 	for (const element of searchElements) {
@@ -26,6 +30,10 @@ const staticOpcodeRunners = {
 	[OPCODE.INT_TO_B64]: (int: number | bigint) => ({
 		returnImmidiately: false,
 		result: intToBase64(int),
+	}),
+	[OPCODE.SHIFT_ARGS]: async (_previousResult: unknown, _restSequence: string, initialArgs: string[]) => ({
+		returnImmidiately: false,
+		result: initialArgs.shift(),
 	}),
 };
 
@@ -149,6 +157,25 @@ export default new class TGBot {
 			await this.deleteMessage(message.chat.id, message.message_id);
 			await changeAdminView(dataProcessingViewId);
 		}
+		const warnUserRunner = (force: boolean) => async (userId: number | bigint) => {
+			const uid = Number(userId);
+			const warnings = await DB.getUserWarnings(groupId, uid);
+			if (!force && warnings.lastWarningTimeAgo < (60_000 /* 1m */)) {
+				const { user } = await this.getChatMember(groupId, uid);
+				await changeAdminView(warnRecentViewId, undefined, [userId.toString(), user.first_name, user.last_name, user.username]);
+				return {
+					returnImmidiately: true,
+					result: null,
+				};
+			}
+			await DB.addUserWarning(groupId, uid);
+			await this.warnChatMeber(groupId, uid, warnings.amount);
+			await DB.releaseWarnSession(groupId, uid);
+			return {
+				returnImmidiately: false,
+				result: null,
+			};
+		};
 		await runString(callbackQuery.data, {
 			[OPCODE.CHANGE_VIEW]: async (viewId: number | bigint, restSequence: string, initialArgs: string[]) => {
 				await changeAdminView(viewId, restSequence, initialArgs);
@@ -199,6 +226,42 @@ export default new class TGBot {
 					result: null,
 				};
 			},
+			[OPCODE.WARN_CONFIRM]: async (userId: number | bigint) => {
+				const uid = Number(userId);
+				const [session, warnings, { user }] = await Promise.all([
+					DB.acquireWarnSession(groupId, uid),
+					DB.getUserWarnings(groupId, uid),
+					this.getChatMember(groupId, uid),
+				]);
+				if (warnings.amount >= 3) {
+					await changeAdminView(warnCountExceededViewId, undefined, [userId.toString(), user.first_name, user.last_name, user.username]);
+					return {
+						returnImmidiately: true,
+						result: null,
+					};
+				}
+				if (!session) {
+					await changeAdminView(warnAlreadyProcessingViewId, undefined, [userId.toString(), user.first_name, user.last_name, user.username]);
+					return {
+						returnImmidiately: true,
+						result: null,
+					};
+				}
+				await changeAdminView(warnConfirmationViewId, undefined, [userId.toString(), user.first_name, user.last_name, user.username]);
+				return {
+					returnImmidiately: false,
+					result: null,
+				};
+			},
+			[OPCODE.WARN_USER]: warnUserRunner(false),
+			[OPCODE.WARN_CANCEL]: async (userId: number | bigint) => {
+				await DB.releaseWarnSession(groupId, Number(userId));
+				return {
+					returnImmidiately: false,
+					result: null,
+				};
+			},
+			[OPCODE.WARN_USER_FORCE]: warnUserRunner(true),
 			...staticOpcodeRunners,
 		});
 	}
@@ -333,6 +396,17 @@ export default new class TGBot {
 		return await this.call('getChatMember', {
 			chat_id: chatId,
 			user_id: memberId,
+		});
+	}
+
+	async warnChatMeber(groupId: number, userId: number, existingWarnAmount: number) {
+		const nextWarn = existingWarnAmount + 1;
+		if (nextWarn !== 1 && nextWarn !== 2 && nextWarn !== 3) return;
+		const { user } = await this.getChatMember(groupId, userId);
+		await this.sendMessage(`user_warn_message_${nextWarn}`, groupId, 0, {
+			userLink: `tg://user?id=${user.id}`,
+			userName: user.first_name,
+			userFullNameWithNick: `${user.first_name}${user.last_name ? ' ' + user.last_name : ''}${user.username ? ` (@${user.username})` : ''}`,
 		});
 	}
 }

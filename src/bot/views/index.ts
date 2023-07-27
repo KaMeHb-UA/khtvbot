@@ -8,6 +8,11 @@ import * as searchPrompt from './search-prompt';
 import * as dataProcessing from './data-processing';
 import * as banConfirmation from './ban-confirmation';
 import * as muteConfirmation from './mute-confirmation';
+import * as warnConfirmation from './warn-confirmation';
+import * as warnCountExceeded from './warn-count-exceeded';
+import * as warnAlreadyProcessing from './warn-already-processing';
+import * as warn from './warn';
+import * as warnRecent from './warn-recent';
 
 const viewList = [
 	dashboard,
@@ -18,6 +23,11 @@ const viewList = [
 	dataProcessing,
 	banConfirmation,
 	muteConfirmation,
+	warnConfirmation,
+	warnCountExceeded,
+	warnAlreadyProcessing,
+	warn,
+	warnRecent,
 ];
 
 type AdminPhrases<T extends string> = T extends `admin_${infer _}` ? T : never;
