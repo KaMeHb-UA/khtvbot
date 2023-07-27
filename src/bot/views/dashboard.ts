@@ -1,4 +1,5 @@
-import type { View } from '.';
+import type { View, ViewArgs } from '.';
+import abAvailable, { Flags } from '../../ab';
 import { intToBase64 } from '../../helpers';
 import { TGInlineButton } from '../markup';
 import { OPCODE } from '../opcodes';
@@ -8,17 +9,20 @@ import { id as warnViewId } from './warn';
 
 export const id = 0x00;
 
-export default (): View => ({
-	text: 'admin_dashboard',
-	buttons: [
+export default async ({ adminId }: Pick<ViewArgs, 'adminId'>): Promise<View> => {
+	const buttons = [
 		[
 			new TGInlineButton('admin_ban_cmd', `${OPCODE.CHANGE_VIEW}${OPCODE.B64_TO_INT}:${intToBase64(banViewId)}`),
 		],
 		[
 			new TGInlineButton('admin_mute_cmd', `${OPCODE.CHANGE_VIEW}${OPCODE.B64_TO_INT}:${intToBase64(muteViewId)}`),
 		],
-		[
-			new TGInlineButton('admin_warn_cmd', `${OPCODE.CHANGE_VIEW}${OPCODE.B64_TO_INT}:${intToBase64(warnViewId)}`),
-		],
-	],
-});
+	];
+	if (await abAvailable(Flags.warnings, adminId)) {
+		buttons.push([new TGInlineButton('admin_warn_cmd', `${OPCODE.CHANGE_VIEW}${OPCODE.B64_TO_INT}:${intToBase64(warnViewId)}`)]);
+	}
+	return {
+		text: 'admin_dashboard',
+		buttons,
+	};
+};
