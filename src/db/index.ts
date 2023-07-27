@@ -83,4 +83,30 @@ export default new class DB {
 	async setAdminDynamicInputScript(adminId: number, scriptToRun: string) {
 		await this.client.from('admin_dynamic_inputs').insert({ uid: adminId, script: scriptToRun });
 	}
+
+	async acquireWarnSession(groupId: number, userId: number) {
+		const res = await this.client.rpc('acquire_warn_session', {
+			group_id: groupId,
+			user_id: userId,
+		});
+		return res.data as Database['public']['Tables']['warning_locks']['Row']['session'] | null;
+	}
+
+	async releaseWarnSession(groupId: number, userId: number) {
+		await this.client.from('warning_locks').delete().eq('chat_id', groupId).eq('uid', userId);
+	}
+
+	async getUserWarnings(chatId: number, userId: number) {
+		const res = await this.client.from('warnings').select('datetime').eq('chat_id', chatId).eq('uid', userId).order('datetime', { ascending: false });
+		const warnings = (res.data || []).map(({ datetime }) => new Date(datetime!));
+		return {
+			amount: warnings.length,
+			lastWarningTimeAgo: warnings.length ? Date.now() - Number(warnings[0]) : Infinity,
+			list: warnings,
+		};
+	}
+
+	async addUserWarning(chatId: number, userId: number) {
+		await this.client.from('warnings').insert({ chat_id: chatId, uid: userId });
+	}
 }
