@@ -1,0 +1,5 @@
+CREATE TABLE warnings (
+	chat_id BIGINT NOT NULL,
+	uid BIGINT NOT NULL,
+	datetime TIMESTAMP DEFAULT NOW()
+);

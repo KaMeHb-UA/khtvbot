@@ -47,6 +47,36 @@ export type Phrases = {
 	};
 	admin_confirmation_yes_cmd: Record<string, never>;
 	admin_confirmation_no_cmd: Record<string, never>;
+	user_warn_message_1: {
+		userLink: string;
+		userName: string;
+	};
+	user_warn_message_2: {
+		userLink: string;
+		userName: string;
+	};
+	user_warn_message_3: {
+		userLink: string;
+		userFullNameWithNick: string;
+	};
+	admin_user_warn_already_processing: {
+		targetUserName: string;
+		targetUserLink: string;
+	};
+	admin_user_warn_confirmation: {
+		targetUserName: string;
+		targetUserLink: string;
+	};
+	admin_user_warn_count_exceeded: {
+		targetUserName: string;
+		targetUserLink: string;
+	};
+	admin_user_warn_recent: {
+		targetUserName: string;
+		targetUserLink: string;
+	};
+	admin_warn_view: Record<string, never>;
+	admin_warn_cmd: Record<string, never>;
 };
 
 type UnionToIntersection<U> =(U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;

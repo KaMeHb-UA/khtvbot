@@ -7,6 +7,11 @@ export enum OPCODE {
 	B64_TO_INT = '5',
 	BAN_CONFIRM = '6',
 	MUTE_CONFIRM = '7',
+	WARN_USER = '8',
+	WARN_CONFIRM = '9',
+	WARN_CANCEL = 'a',
+	SHIFT_ARGS = 'b',
+	WARN_USER_FORCE = 'c',
 }
 
 type MaybePromise<T> = T | PromiseLike<T>;
