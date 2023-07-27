@@ -146,6 +146,7 @@ export default new class TGBot {
 		const changeAdminView = async (viewId: number | bigint, restSequence?: string, initialArgs?: string[]) => {
 			const view = (views as Record<number, (args: ViewArgs) => (View | Promise<View>)>)[Number(viewId)];
 			const { text, textTranslationArgs, buttons } = await view({
+				adminId: callbackQuery.from.id,
 				groupId,
 				searchText: message?.text,
 				opcodeSequence: restSequence,
