@@ -1,0 +1,4 @@
+CREATE TABLE ab (
+	flag VARCHAR(255) PRIMARY KEY,
+	user_ids JSONB NOT NULL
+);
