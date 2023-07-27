@@ -20,4 +20,3 @@ export default async ({ initialArgs: [ uid, firstName, lastName, username ] = []
 		]],
 	};
 };
-
