@@ -77,6 +77,7 @@ export type Phrases = {
 	};
 	admin_warn_view: Record<string, never>;
 	admin_warn_cmd: Record<string, never>;
+	admin_warn_success: Record<string, never>;
 };
 
 type UnionToIntersection<U> =(U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;

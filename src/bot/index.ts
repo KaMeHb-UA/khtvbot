@@ -172,6 +172,8 @@ export default new class TGBot {
 			await DB.addUserWarning(groupId, uid);
 			await this.warnChatMeber(groupId, uid, warnings.amount);
 			await DB.releaseWarnSession(groupId, uid);
+			await changeAdminView(dashboardViewId);
+			await this.answerCallbackQuery(callbackQuery.id, 'admin_warn_success', {});
 			return {
 				returnImmidiately: false,
 				result: null,
