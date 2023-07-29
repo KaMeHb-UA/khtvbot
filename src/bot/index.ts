@@ -406,6 +406,12 @@ export default new class TGBot {
 		const nextWarn = existingWarnAmount + 1;
 		if (nextWarn !== 1 && nextWarn !== 2 && nextWarn !== 3) return;
 		const { user } = await this.getChatMember(groupId, userId);
+		if (nextWarn === 3) {
+			await this.call('banChatMember', {
+				chat_id: groupId,
+				user_id: userId,
+			});
+		}
 		await this.sendMessage(`user_warn_message_${nextWarn}`, groupId, 0, {
 			userLink: `tg://user?id=${user.id}`,
 			userName: user.first_name,
