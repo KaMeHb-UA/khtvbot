@@ -17,7 +17,7 @@ export enum OPCODE {
 
 type MaybePromise<T> = T | PromiseLike<T>;
 
-type Runners = {
+export type Runners = {
 	[x in OPCODE]: (previousResult: any, restSequence: string, initialArgs: string[]) => MaybePromise<{
 		result: any;
 		returnImmidiately: boolean;
