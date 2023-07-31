@@ -5,7 +5,7 @@ import bot from './bot';
 import cron from './cron';
 import ntfy from './ntfy';
 
-export default {
+class Controller {
 	async fetch(request: Request, env: Environment, context: Context) {
 		init(env);
 		try {
@@ -21,7 +21,8 @@ export default {
 				status: 500,
 			});
 		}
-	},
+	}
+
 	async scheduled(event: ScheduledEvent, env: Environment, context: Context) {
 		init(env);
 		try {
@@ -30,5 +31,7 @@ export default {
 		} catch(e) {
 			await ntfy(e as Error);
 		}
-	},
-};
+	}
+}
+
+export default new Controller();

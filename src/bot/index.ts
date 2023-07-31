@@ -38,7 +38,7 @@ const staticOpcodeRunners = {
 	}),
 };
 
-export default new class TGBot {
+class TGBot {
 	private token = '';
 	private webhookSecret = '';
 
@@ -424,3 +424,5 @@ export default new class TGBot {
 		});
 	}
 }
+
+export default new TGBot();
