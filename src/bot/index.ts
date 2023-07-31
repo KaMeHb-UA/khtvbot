@@ -14,6 +14,7 @@ import { id as warnConfirmationViewId } from './views/warn-confirmation';
 import { id as warnAlreadyProcessingViewId } from './views/warn-already-processing';
 import { id as warnCountExceededViewId } from './views/warn-count-exceeded';
 import { id as warnRecentViewId } from './views/warn-recent';
+import { fixOpcodeFunctionsNames } from '../helpers/debug';
 
 function arrayIncludes<T extends any[]>(array: T, searchElements: T) {
 	for (const element of searchElements) {
@@ -179,7 +180,7 @@ export default new class TGBot {
 				result: null,
 			};
 		};
-		await runString(callbackQuery.data, {
+		await runString(callbackQuery.data, fixOpcodeFunctionsNames({
 			[OPCODE.CHANGE_VIEW]: async (viewId: number | bigint, restSequence: string, initialArgs: string[]) => {
 				await changeAdminView(viewId, restSequence, initialArgs);
 				return {
@@ -270,7 +271,7 @@ export default new class TGBot {
 				throw new Error('Debug in progress');
 			},
 			...staticOpcodeRunners,
-		});
+		}));
 	}
 
 	private async findGroupByAdminId(groups: number[], chatId: number) {
