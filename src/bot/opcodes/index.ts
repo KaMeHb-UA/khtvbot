@@ -12,6 +12,7 @@ export enum OPCODE {
 	WARN_CANCEL = 'a',
 	SHIFT_ARGS = 'b',
 	WARN_USER_FORCE = 'c',
+	THROW_ERROR = 'd',
 }
 
 type MaybePromise<T> = T | PromiseLike<T>;

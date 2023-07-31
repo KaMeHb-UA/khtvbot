@@ -265,6 +265,10 @@ export default new class TGBot {
 				};
 			},
 			[OPCODE.WARN_USER_FORCE]: warnUserRunner(true),
+			[OPCODE.THROW_ERROR]: async () => {
+				await this.answerCallbackQuery(callbackQuery.id, 'admin_throw_error_reply', {});
+				throw new Error('Debug in progress');
+			},
 			...staticOpcodeRunners,
 		});
 	}

@@ -13,6 +13,7 @@ import * as warnCountExceeded from './warn-count-exceeded';
 import * as warnAlreadyProcessing from './warn-already-processing';
 import * as warn from './warn';
 import * as warnRecent from './warn-recent';
+import * as debugMenu from './debug-menu';
 
 const viewList = [
 	dashboard,
@@ -28,6 +29,7 @@ const viewList = [
 	warnAlreadyProcessing,
 	warn,
 	warnRecent,
+	debugMenu,
 ];
 
 type AdminPhrases<T extends string> = T extends `admin_${infer _}` ? T : never;
