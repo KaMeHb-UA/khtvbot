@@ -6,7 +6,7 @@ import cron from './cron';
 import ntfy from './ntfy';
 
 class Controller {
-	async fetch(request: Request, env: Environment, context: Context) {
+	fetch = async (request: Request, env: Environment, context: Context) => {
 		init(env);
 		try {
 			const { waitUntil } = await bot.processUpdate(
@@ -23,7 +23,7 @@ class Controller {
 		}
 	}
 
-	async scheduled(event: ScheduledEvent, env: Environment, context: Context) {
+	scheduled = async (event: ScheduledEvent, env: Environment, context: Context) => {
 		init(env);
 		try {
 			const { waitUntil } = await cron(event.cron, env);
