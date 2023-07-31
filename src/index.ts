@@ -1,3 +1,4 @@
+import './source-map';
 import type { Environment, Context } from './platform';
 import init from './init';
 import bot from './bot';
