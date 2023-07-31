@@ -84,10 +84,11 @@ class DB {
 		await this.client.from('admin_dynamic_inputs').insert({ uid: adminId, script: scriptToRun });
 	}
 
-	async acquireWarnSession(groupId: number, userId: number) {
+	async acquireWarnSession(groupId: number, userId: number, adminId: number) {
 		const res = await this.client.rpc('acquire_warn_session', {
 			group_id: groupId,
 			user_id: userId,
+			admin: adminId,
 		});
 		return res.data as Database['public']['Tables']['warning_locks']['Row']['session'] | null;
 	}

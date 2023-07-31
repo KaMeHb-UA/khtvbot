@@ -132,17 +132,23 @@ export interface Database {
       }
       warning_locks: {
         Row: {
+          admin_id: number | null
           chat_id: number
+          created_at: string | null
           session: string
           uid: number
         }
         Insert: {
+          admin_id?: number | null
           chat_id: number
+          created_at?: string | null
           session: string
           uid: number
         }
         Update: {
+          admin_id?: number | null
           chat_id?: number
+          created_at?: string | null
           session?: string
           uid?: number
         }
@@ -170,7 +176,7 @@ export interface Database {
     }
     Functions: {
       acquire_warn_session: {
-        Args: { group_id: number; user_id: number }
+        Args: { group_id: number; user_id: number; admin: number }
         Returns: string
       }
       distinct_updates: {

@@ -233,7 +233,7 @@ class TGBot {
 			[OPCODE.WARN_CONFIRM]: async (userId: number | bigint) => {
 				const uid = Number(userId);
 				const [session, warnings, { user }] = await Promise.all([
-					DB.acquireWarnSession(groupId, uid),
+					DB.acquireWarnSession(groupId, uid, adminId),
 					DB.getUserWarnings(groupId, uid),
 					this.getChatMember(groupId, uid),
 				]);
