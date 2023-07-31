@@ -1,7 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { Database } from './schema';
 
-export default new class DB {
+class DB {
 	private client = (null as unknown as SupabaseClient<Database>);
 
 	private cache: Record<string, any> = Object.create(null);
@@ -115,3 +115,5 @@ export default new class DB {
 		return res.data?.user_ids as number[] | undefined;
 	}
 }
+
+export default new DB();
