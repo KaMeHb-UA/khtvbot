@@ -7,7 +7,7 @@ export default new class DB {
 	private cache: Record<string, any> = Object.create(null);
 
 	init(url: string, key: string) {
-		this.client = createClient<Database>(url, key, { global: { fetch } });
+		this.client = createClient<Database>(url, key, { global: { fetch }, auth: { persistSession: false } });
 	}
 
 	private async getCached<T>(cacheFieldName: string, load: () => Promise<T>) {
