@@ -9,10 +9,13 @@ class Controller {
 	fetch = async (request: Request, env: Environment, context: Context) => {
 		init(env);
 		try {
-			const { waitUntil } = await bot.processUpdate(
-				request.headers.get('X-Telegram-Bot-Api-Secret-Token'),
-				await request.json(),
-			);
+			const token = request.headers.get('X-Telegram-Bot-Api-Secret-Token');
+			if (!token) {
+				return new Response('Forbidden', {
+					status: 403,
+				});
+			}
+			const { waitUntil } = await bot.processUpdate(token, await request.json());
 			context.waitUntil(waitUntil);
 			return new Response('OK');
 		} catch(e) {
