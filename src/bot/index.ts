@@ -401,10 +401,19 @@ class TGBot {
 	}
 
 	async getChatMember(chatId: number, memberId: number) {
-		return await this.call('getChatMember', {
-			chat_id: chatId,
-			user_id: memberId,
-		});
+		try {
+			return await this.call('getChatMember', {
+				chat_id: chatId,
+				user_id: memberId,
+			});
+		} catch(e) {
+			throw Object.assign(e as any, {
+				additionalInfo: {
+					chatId,
+					memberId,
+				},
+			});
+		}
 	}
 
 	async warnChatMeber(groupId: number, userId: number, existingWarnAmount: number) {
