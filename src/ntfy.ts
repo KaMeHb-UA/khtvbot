@@ -1,3 +1,5 @@
+import fetch from './fetch';
+
 let ntfyTopic = '';
 
 function formatAdditionalData(data: Record<string, any>) {
