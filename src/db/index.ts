@@ -115,6 +115,19 @@ class DB {
 		const res = await this.client.from('ab').select('user_ids').eq('flag', name).single();
 		return res.data?.user_ids as number[] | undefined;
 	}
+
+	async getUserInfo(chatId: number, uid: number) {
+		const { error, data } = await this.client
+			.from('updates')
+			.select('data')
+			.eq('uid', uid)
+			.eq('chat_id', chatId)
+			.order('received_at', { ascending: false })
+			.limit(1)
+			.single();
+		if (error) throw error;
+		return (data.data as any).from;
+	}
 }
 
 export default new DB();

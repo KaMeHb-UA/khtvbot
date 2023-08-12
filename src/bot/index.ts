@@ -370,11 +370,11 @@ class TGBot {
 	}
 
 	async banChatMember(groupId: number, userId: number) {
+		const { user } = await this.getChatMember(groupId, userId);
 		await this.call('banChatMember', {
 			chat_id: groupId,
 			user_id: userId,
 		});
-		const { user } = await this.getChatMember(groupId, userId);
 		await this.sendMessage('user_ban_message', groupId, 0, {
 			userLink: `tg://user?id=${user.id}`,
 			userFullNameWithNick: `${user.first_name}${user.last_name ? ' ' + user.last_name : ''}${user.username ? ` (@${user.username})` : ''}`,
@@ -382,11 +382,11 @@ class TGBot {
 	}
 
 	async muteChatMember(groupId: number, userId: number) {
+		const { user } = await this.getChatMember(groupId, userId);
 		await this.call('restrictChatMember', {
 			chat_id: groupId,
 			user_id: userId,
 		});
-		const { user } = await this.getChatMember(groupId, userId);
 		await this.sendMessage('user_mute_message', groupId, 0, {
 			userLink: `tg://user?id=${user.id}`,
 			userName: user.first_name,
@@ -407,12 +407,20 @@ class TGBot {
 				user_id: memberId,
 			});
 		} catch(e) {
-			throw Object.assign(e as any, {
-				additionalInfo: {
-					chatId,
-					memberId,
-				},
-			});
+			try {
+				const user = await DB.getUserInfo(chatId, memberId);
+				return {
+					status: 'unknown',
+					user,
+				};
+			} catch(e) {
+				throw Object.assign(e as any, {
+					additionalInfo: {
+						chatId,
+						memberId,
+					},
+				});
+			}
 		}
 	}
 
