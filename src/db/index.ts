@@ -1,5 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import { Database } from './schema';
+import fetch from '../fetch';
 
 class DB {
 	private client = (null as unknown as SupabaseClient<Database>);

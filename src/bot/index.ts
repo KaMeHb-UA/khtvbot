@@ -15,6 +15,7 @@ import { id as warnAlreadyProcessingViewId } from './views/warn-already-processi
 import { id as warnCountExceededViewId } from './views/warn-count-exceeded';
 import { id as warnRecentViewId } from './views/warn-recent';
 import { fixOpcodeFunctionsNames } from '../helpers/debug';
+import fetch from '../fetch';
 
 function arrayIncludes<T extends any[]>(array: T, searchElements: T) {
 	for (const element of searchElements) {
