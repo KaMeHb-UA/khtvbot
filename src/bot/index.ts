@@ -414,8 +414,19 @@ class TGBot {
 					status: 'unknown',
 					user,
 				};
-			} catch(e) {
-				throw Object.assign(e as any, {
+			} catch(e2) {
+				const stackedError = new Error(
+					[
+						'Could not get chat member from Telegram as well as from DB',
+						'Telegram error:',
+						String((e as any)?.stack || e),
+						''.padStart(10, '-'),
+						'DB error:',
+						String((e2 as any)?.stack || e2),
+						''.padStart(10, '-'),
+					].join('\n')
+				);
+				throw Object.assign(stackedError, {
 					additionalInfo: {
 						chatId,
 						memberId,
