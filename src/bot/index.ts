@@ -293,7 +293,7 @@ class TGBot {
 			throw new Error('Error validating webhook secret');
 		}
 		const { update_id: updateId, message, callback_query: callbackQuery } = update;
-		const { chat: { id: groupId } } = message || callbackQuery.message;
+		const { chat: { id: groupId, name: groupName } } = message || callbackQuery.message;
 		if (await DB.updateExists(updateId)) return { waitUntil: Promise.resolve() };
 		await DB.addUpdate(updateId, groupId, message ? this.getMessageType(message): 'callback_query', message || callbackQuery);
 		const availableGroups = (await DB.groupList()).map(({ id }) => id);
@@ -302,7 +302,12 @@ class TGBot {
 			try {
 				targetGroup = await this.findGroupByAdminId(availableGroups, groupId);
 			} catch(e) {
-				throw new Error('Error validating chat id');
+				throw Object.assign(new Error('Error validating chat id'), {
+					additionalInfo: {
+						groupId,
+						groupName,
+					},
+				});
 			}
 			const res = await this.processAdminUpdate(targetGroup, message, callbackQuery);
 			return {
@@ -422,7 +427,7 @@ class TGBot {
 						String((e as any)?.stack || e),
 						''.padStart(10, '-'),
 						'DB error:',
-						String((e2 as any)?.stack || e2),
+						JSON.stringify(e2, null, '\t'),
 						''.padStart(10, '-'),
 					].join('\n')
 				);
