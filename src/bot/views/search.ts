@@ -40,7 +40,7 @@ export default async ({ groupId, searchText, opcodeSequence, initialArgs }: View
 			} else if (from.username) {
 				optionalSearchFields.push(from.username);
 			}
-			for (const name of [from.first_name, ...optionalSearchFields]) {
+			for (const name of [String(uid), from.first_name, ...optionalSearchFields]) {
 				if (searchSpecifier === name) {
 					weight += 1;
 				} else if (name.includes(searchSpecifier)) {
