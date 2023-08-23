@@ -412,22 +412,22 @@ class TGBot {
 				chat_id: chatId,
 				user_id: memberId,
 			});
-		} catch(e) {
+		} catch(e: any) {
 			try {
 				const user = await DB.getUserInfo(chatId, memberId);
 				return {
 					status: 'unknown',
 					user,
 				};
-			} catch(e2) {
+			} catch(e2: any) {
 				const stackedError = new Error(
 					[
 						'Could not get chat member from Telegram as well as from DB',
 						'Telegram error:',
-						String((e as any)?.stack || e),
+						String(e?.stack || e),
 						''.padStart(10, '-'),
 						'DB error:',
-						JSON.stringify(e2, null, '\t'),
+						e2?.details || JSON.stringify(e2, null, '\t'),
 						''.padStart(10, '-'),
 					].join('\n')
 				);
