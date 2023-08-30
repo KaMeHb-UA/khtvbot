@@ -55,7 +55,7 @@ class DB {
 	}
 
 	async getAdminDashboardMessage(uid: number) {
-		const res = await this.client.from('admin_start_messages').select('message_id').eq('uid', uid).single();
+		const res = await this.client.from('admin_start_messages').select('message_id').eq('uid', uid).maybeSingle();
 		if (!res.data) throw new Error(`Can't find admin start message for uid ${uid}`);
 		return res.data.message_id;
 	}
@@ -113,7 +113,7 @@ class DB {
 	}
 
 	async getABFlag(name: string) {
-		const res = await this.client.from('ab').select('user_ids').eq('flag', name).single();
+		const res = await this.client.from('ab').select('user_ids').eq('flag', name).maybeSingle();
 		return res.data?.user_ids as number[] | undefined;
 	}
 
@@ -125,9 +125,12 @@ class DB {
 			.eq('chat_id', chatId)
 			.order('received_at', { ascending: false })
 			.limit(1)
-			.single();
+			.maybeSingle();
 		if (error) throw error;
-		return (data.data as any).from;
+		return (data?.data as any)?.from || {
+			id: uid,
+			first_name: `Unknown user (id ${uid})`,
+		};
 	}
 }
 
