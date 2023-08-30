@@ -1,0 +1,41 @@
+name: Check the bot
+
+on:
+  pull_request:
+
+jobs:
+  build-check:
+    name: Build check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+
+      - name: Setup Supabase
+        uses: ./.github/actions/setup-supabase
+
+      - name: Generate DB schema
+        run: yarn exec supabase gen types typescript --local > src/db/schema.ts
+
+      - name: Commit changed schema
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/db/schema.ts
+          git commit -m "update DB schema" && git push || echo "No changes in DB schema found"
+
+      - name: Check actual build & type errors with TSC
+        run: yarn run tsc
